@@ -18,16 +18,15 @@ package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 import com.vaadin.annotations.JavaScript;
 import com.wcs.wcslib.vaadin.widget.recaptcha.ReCaptcha;
 
-import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.server.ExternalResource;
 import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
+import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Link;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
@@ -40,7 +39,7 @@ import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 @JavaScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js")
 public class DemoUI extends UI {
 
-    @WebServlet(value = "/*", asyncSupported = true)
+    @WebServlet(value = "/*")
     @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class, 
             widgetset = "com.wcs.wcslib.vaadin.widget.recaptcha.demo.DemoWidgetSet")
     public static class Servlet extends VaadinServlet {
@@ -52,6 +51,13 @@ public class DemoUI extends UI {
         final VerticalLayout layout = new VerticalLayout();
         final ConfigComponent configComponent = new ConfigComponent();
 
+        layout.addComponent(new Label("<h1>Vaadin ReCaptcha Add-on Demo</h1>"
+                + "<p>See "
+                + "<a href=\"https://developers.google.com/recaptcha/docs/customization\" target=\"_blank\">"
+                + "ReCaptcha API"
+                + "</a>"
+                + " to understand theese settings. Or just Press 'SHOW' :)"
+                + "</p>", ContentMode.HTML));
         layout.addComponent(configComponent);
         layout.setSpacing(true);
         layout.setMargin(true);
@@ -71,13 +77,7 @@ public class DemoUI extends UI {
             }
         });
         
-        HorizontalLayout btnLayout = new HorizontalLayout(
-                showBtn, 
-                new Link("Recaptcha API docs",
-                        new ExternalResource("https://developers.google.com/recaptcha/docs/customization")));
-        btnLayout.setSpacing(true);
-        
-        layout.addComponent(btnLayout);
+        layout.addComponent(showBtn);
         setContent(layout);
     }
 

@@ -19,7 +19,7 @@
         <Implementation-Title>${project.name}</Implementation-Title>
         <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
         <Vaadin-License-Title>Apache License 2.0</Vaadin-License-Title>
-        <Vaadin-Addon>${artifactId}-${project.version}.jar</Vaadin-Addon>
+        <Vaadin-Addon>${project.artifactId}-${project.version}.jar</Vaadin-Addon>
     </properties>
 
     <organization>
@@ -29,14 +29,14 @@
     
     <scm>
         <url>git://github.com/wbstr/ReCaptcha.git</url>
-        <connection>scm:git:git://github.com/wbstr/vaadin-recaptcha.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:/wbstr/vaadin-recaptcha.git</developerConnection>
+        <connection>scm:git:git://github.com:wbstr/vaadin-recaptcha.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:wbstr/vaadin-recaptcha.git</developerConnection>
         <tag>ReCaptcha add-on for Vaadin</tag>
     </scm>
 
     <issueManagement>
         <system>GitHub</system>
-        <url>https://github.com/wbstr/ReCaptcha/issues</url>
+        <url>https://github.com/wbstr/vaadin-recaptcha/issues</url>
     </issueManagement>
 
     <licenses>
