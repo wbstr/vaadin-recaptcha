@@ -83,8 +83,10 @@ public class DemoUI extends UI {
 
     private ReCaptcha createCaptcha(final ConfigComponent config) {
         return new ReCaptcha(
-                "6LeIA-oSAAAAAIYbT--2nA_mJq-LhUlNyCZZE4jo",
-                "6LeIA-oSAAAAAO93gixbSw3lp4Om6w8H3UVpUQL_",
+                //Theese keys works only with our demo.webstar.hu domain!
+                //create your own here: http://www.google.com/recaptcha
+                "6Lfv5OoSAAAAAPEbWhNB0ERopfQpRxr8_5yncOmg",
+                "6Lfv5OoSAAAAAHa4zmExf6w2ja3vm-8ABKgyepq-",
                 new ReCaptchaOptions() {
                     {
                         theme = config.getTheme();
