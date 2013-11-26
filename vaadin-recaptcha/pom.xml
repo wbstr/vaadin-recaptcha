@@ -54,12 +54,6 @@
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client</artifactId>
-            <version>${vaadin.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>net.tanesha.recaptcha4j</groupId>
             <artifactId>recaptcha4j</artifactId>
             <version>0.0.7</version>
@@ -94,7 +88,6 @@
                             <!-- Package format version - do not change -->
                             <Vaadin-Package-Version>1</Vaadin-Package-Version>
                             <Vaadin-License-Title>${Vaadin-License-Title}</Vaadin-License-Title>
-                            <Vaadin-Widgetsets>com.wcs.wcslib.vaadin.widget.recaptcha.WidgetSet</Vaadin-Widgetsets>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -102,20 +95,6 @@
 			
         </plugins>
 
-        <!-- This is needed for the sources required by the client-side compiler to be 
-        included in the produced JARs -->
-        <resources>
-            <resource>
-                <directory>src/main/java</directory>
-                <excludes>
-                    <exclude>rebel.xml</exclude>
-                </excludes>
-            </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-            </resource>
-        </resources>
-		
     </build>
 
 </project>

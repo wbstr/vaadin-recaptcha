@@ -40,8 +40,7 @@ import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 public class DemoUI extends UI {
 
     @WebServlet(value = "/*")
-    @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class, 
-            widgetset = "com.wcs.wcslib.vaadin.widget.recaptcha.demo.DemoWidgetSet")
+    @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
     }
 
