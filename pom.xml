@@ -7,6 +7,17 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>Vaadin ReCaptcha Add-on Root Project</name>
+    
+    <organization>
+        <name>Webstar Csoport</name>
+        <url>https://github.com/wbstr/</url>
+    </organization>
+    
+    <scm>
+        <url>git://github.com/wbstr/ReCaptcha.git</url>
+        <connection>scm:git:git://github.com:wbstr/vaadin-recaptcha.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com:wbstr/vaadin-recaptcha.git</developerConnection>
+    </scm>
 
     <modules>
         <module>vaadin-recaptcha</module>
