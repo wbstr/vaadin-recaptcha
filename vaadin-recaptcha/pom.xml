@@ -28,10 +28,9 @@
     </organization>
     
     <scm>
-        <url>git://github.com/wbstr/ReCaptcha.git</url>
-        <connection>scm:git:git://github.com:wbstr/vaadin-recaptcha.git</connection>
-        <developerConnection>scm:git:ssh://git@github.com:wbstr/vaadin-recaptcha.git</developerConnection>
-        <tag>ReCaptcha add-on for Vaadin</tag>
+        <url>https://github.com/wbstr/ReCaptcha.git</url>
+        <connection>scm:git:git@github.com:wbstr/vaadin-recaptcha.git</connection>
+        <developerConnection>scm:git:git@github.com:wbstr/vaadin-recaptcha.git</developerConnection>
     </scm>
 
     <issueManagement>
