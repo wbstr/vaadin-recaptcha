@@ -25,7 +25,7 @@ function() {
             html = state.customHtml;
             elementId = null;
         } else {
-            html = '<div id="recaptcha_div"></div>';
+            html = '<div id="recaptcha_div" style="height:129px;width:318px;"></div>';
             elementId = "recaptcha_div";
         }
         element.innerHTML = html;
