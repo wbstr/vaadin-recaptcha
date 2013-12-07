@@ -9,7 +9,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <vaadin.version>7.1.7</vaadin.version>
+        <vaadin.version>7.1.0</vaadin.version>
         <vaadin.plugin.version>${vaadin.version}</vaadin.plugin.version>
     </properties>
 
@@ -74,6 +74,14 @@
                     <webApp>
                         <contextPath>/vaadin-recaptcha</contextPath>
                     </webApp>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
