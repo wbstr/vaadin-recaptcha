@@ -38,7 +38,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
 
     private String challenge;
     private String response;
-    private final String privateKey;
+    private final ReCaptchaImpl recaptcha4j;
 
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options) {
         this(privateKey, publicKey, options, null);
@@ -46,7 +46,6 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options, String customHtml) {
         super();
-        this.privateKey = privateKey;
         getState().publicKey = publicKey;
         getState().options = options;
         getState().customHtml = customHtml;
@@ -57,6 +56,8 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
                 response = arguments.getString(1);
             }
         });
+        recaptcha4j = new ReCaptchaImpl();
+        recaptcha4j.setPrivateKey(privateKey);
     }
 
     @Override
@@ -64,16 +65,34 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         return (ReCaptchaState) super.getState();
     }
 
-    public boolean isValid() {
+    /**
+     * Validates the answer with server-side ReCaptcha api.
+     * When it is invalid, reloads automatically.
+     * When the answer is valid, this method will return true for the first time only!
+     * This behavior comes from ReCaptcha.
+     * Recaptcha4j used for handling the api.
+     * 
+     * @return valid, or not
+     */
+    public boolean validate() {
         if (challenge == null || response==null) {
             return false;
         }
         String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
-        ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
-        reCaptcha.setPrivateKey(privateKey);
-        ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr, challenge, response);
+        ReCaptchaResponse reCaptchaResponse = recaptcha4j.checkAnswer(remoteAddr, challenge, response);
         //incorrect-captcha-sol
-        return reCaptchaResponse.isValid();
+        boolean valid = reCaptchaResponse.isValid();
+        if (!valid) {
+            reload();
+        }
+        return valid;
+    }
+    
+    /**
+     * Reloads the captcha.
+     */
+    public void reload() {
+        callFunction("reload");
     }
 
 }

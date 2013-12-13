@@ -103,7 +103,7 @@ public class DemoUI extends UI {
 
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                if (!reCaptcha.isValid()) {
+                if (!reCaptcha.validate()) {
                     Notification.show("Invalid!", Notification.Type.ERROR_MESSAGE);
                 } else {
                     Notification.show("Success!");

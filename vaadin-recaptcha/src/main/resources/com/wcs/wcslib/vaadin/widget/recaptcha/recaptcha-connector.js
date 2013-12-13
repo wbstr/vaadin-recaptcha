@@ -31,6 +31,10 @@ function() {
         element.innerHTML = html;
         Recaptcha.create(state.publicKey, elementId, state.options);
     };
+    
+    this.reload = function() {
+        Recaptcha.reload();
+    };
 
     var connector = this;
     element.onchange = function() {
