@@ -16,23 +16,18 @@
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
 import com.vaadin.annotations.JavaScript;
-import com.wcs.wcslib.vaadin.widget.recaptcha.ReCaptcha;
 
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
-import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
 import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
-import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
-import com.vaadin.ui.Notification;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
 import javax.servlet.annotation.WebServlet;
-import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 
 @Title("ReCaptcha Add-on Demo")
 @SuppressWarnings("serial")
@@ -62,66 +57,18 @@ public class DemoUI extends UI {
         layout.setMargin(true);
 
         Button showBtn = new Button("SHOW", new Button.ClickListener() {
-            
+
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 layout.removeAllComponents();
-                ReCaptcha reCaptcha = createCaptcha(configComponent);
-                Button validateBtn = createValidateBtn(reCaptcha);
-                layout.addComponent(reCaptcha);
-                Button reconfigBtn = createReconfigBtn();
-                HorizontalLayout actionsLayout = new HorizontalLayout(validateBtn, reconfigBtn);
-                actionsLayout.setSpacing(true);
-                layout.addComponent(actionsLayout);
+                DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent);
+                layout.addComponent(dummyRegWithReCaptcha);
+                layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
             }
         });
-        
+
         layout.addComponent(showBtn);
         setContent(layout);
-    }
-
-    private ReCaptcha createCaptcha(final ConfigComponent config) {
-        return new ReCaptcha(
-                //Theese keys works only with our demo.webstar.hu domain!
-                //create your own here: http://www.google.com/recaptcha
-                "6Lfv5OoSAAAAAPEbWhNB0ERopfQpRxr8_5yncOmg",
-                "6Lfv5OoSAAAAAHa4zmExf6w2ja3vm-8ABKgyepq-",
-                new ReCaptchaOptions() {
-                    {
-                        theme = config.getTheme();
-                        lang = config.getLang();
-                        custom_translations = config.getCustomTranslations();
-                        custom_theme_widget = config.getCustomThemeWidget();
-                    }
-                },
-                config.getCustomHtml()
-        );
-    }
-
-    private Button createValidateBtn(final ReCaptcha reCaptcha) {
-        return new Button("VALIDATE", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                if (!reCaptcha.validate()) {
-                    Notification.show("Invalid!", Notification.Type.ERROR_MESSAGE);
-                } else {
-                    Notification.show("Success!");
-                }
-            }
-        });
-    }
-
-    private Button createReconfigBtn() {
-        Button reconfigBtn = new Button("ReConfigure", new Button.ClickListener() {
-            
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Page.getCurrent().reload();
-            }
-        });
-        reconfigBtn.setStyleName(Reindeer.BUTTON_LINK);
-        return reconfigBtn;
     }
 
 }

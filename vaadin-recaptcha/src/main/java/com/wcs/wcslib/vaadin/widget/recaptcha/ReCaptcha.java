@@ -28,9 +28,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 /**
- * Vaadin wrapper component for ReCaptcha javascript API.
- * recaptcha4j wrapped too for server-side validation.
- * 
+ * Vaadin wrapper component for ReCaptcha javascript API. recaptcha4j wrapped too for server-side validation.
+ *
  * @author kumm
  */
 @JavaScript("recaptcha-connector.js")
@@ -43,7 +42,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options) {
         this(privateKey, publicKey, options, null);
     }
-    
+
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options, String customHtml) {
         super();
         getState().publicKey = publicKey;
@@ -67,27 +66,31 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
 
     /**
      * Validates the answer with server-side ReCaptcha api.
-     * When it is invalid, reloads automatically.
-     * When the answer is valid, this method will return true for the first time only!
+     * When the answer is empty returns false.
+     * When the answer is valid, this method will return true for the first time only.
+     * When the answer is invalid, you have to reload to get a new chance to pass.
      * This behavior comes from ReCaptcha.
      * Recaptcha4j used for handling the api.
-     * 
+     *
      * @return valid, or not
      */
     public boolean validate() {
-        if (challenge == null || response==null) {
+        if (isEmpty()) {
             return false;
         }
         String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
         ReCaptchaResponse reCaptchaResponse = recaptcha4j.checkAnswer(remoteAddr, challenge, response);
-        //incorrect-captcha-sol
-        boolean valid = reCaptchaResponse.isValid();
-        if (!valid) {
-            reload();
-        }
-        return valid;
+        return reCaptchaResponse.isValid();
     }
-    
+
+    /**
+     * Is user filled the capthcha?
+     * @return is empty
+     */
+    public boolean isEmpty() {
+        return response == null || response.isEmpty();
+    }
+
     /**
      * Reloads the captcha.
      */
