@@ -15,7 +15,6 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
-import com.vaadin.annotations.JavaScript;
 
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
@@ -31,7 +30,6 @@ import javax.servlet.annotation.WebServlet;
 
 @Title("ReCaptcha Add-on Demo")
 @SuppressWarnings("serial")
-@JavaScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js")
 public class DemoUI extends UI {
 
     @WebServlet(value = "/*")

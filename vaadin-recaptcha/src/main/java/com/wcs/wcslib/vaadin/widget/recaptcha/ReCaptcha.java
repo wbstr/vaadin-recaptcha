@@ -84,7 +84,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     }
 
     /**
-     * Is user filled the capthcha?
+     * Is user filled the input?
      * @return is empty
      */
     public boolean isEmpty() {
