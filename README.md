@@ -31,14 +31,15 @@ Try the add-on demo at http://demo.webstar.hu/vaadin-recaptcha
 
 4. Validate somewhere in an event handler
     ```
-    if (!captcha.isValid()) {
+    if (!captcha.validate()) {
         Notification.show("Invalid!", Notification.Type.ERROR_MESSAGE);
+        captcha.reload();
     } else {
         //do your job
     }
     ```
 
-See [DemoUI.java](vaadin-recaptcha-demo/src/main/java/com/wcs/wcslib/vaadin/widget/recaptcha/demo/DemoUI.java)
+See [DummyRegWithReCaptcha.java](vaadin-recaptcha-demo/src/main/java/com/wcs/wcslib/vaadin/widget/recaptcha/demo/DummyRegWithReCaptcha.java)
 
 ## Documentation
 
