@@ -15,17 +15,18 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha;
 
-import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
+import net.tanesha.recaptcha.ReCaptchaImpl;
+import net.tanesha.recaptcha.ReCaptchaResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
+import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
-
-import net.tanesha.recaptcha.ReCaptchaImpl;
-import net.tanesha.recaptcha.ReCaptchaResponse;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 /**
  * Vaadin wrapper component for ReCaptcha javascript API. recaptcha4j wrapped too for server-side validation.
@@ -35,9 +36,12 @@ import org.json.JSONException;
 @JavaScript("recaptcha-connector.js")
 public class ReCaptcha extends AbstractJavaScriptComponent {
 
+    private static final long serialVersionUID = 1L;
+
     private String challenge;
     private String response;
-    private final ReCaptchaImpl recaptcha4j;
+    private transient ReCaptchaImpl recaptcha4j;
+    private final String privateKey;
 
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options) {
         this(privateKey, publicKey, options, null);
@@ -55,8 +59,15 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
                 response = arguments.getString(1);
             }
         });
-        recaptcha4j = new ReCaptchaImpl();
-        recaptcha4j.setPrivateKey(privateKey);
+        this.privateKey = privateKey;
+    }
+
+    private ReCaptchaImpl getRecaptcha4j() {
+        if (recaptcha4j == null) {
+            recaptcha4j = new ReCaptchaImpl();
+            recaptcha4j.setPrivateKey(privateKey);
+        }
+        return recaptcha4j;
     }
 
     @Override
@@ -79,7 +90,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
             return false;
         }
         String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
-        ReCaptchaResponse reCaptchaResponse = recaptcha4j.checkAnswer(remoteAddr, challenge, response);
+        ReCaptchaResponse reCaptchaResponse = getRecaptcha4j().checkAnswer(remoteAddr, challenge, response);
         return reCaptchaResponse.isValid();
     }
 
