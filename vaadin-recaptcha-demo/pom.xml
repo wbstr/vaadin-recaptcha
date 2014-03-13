@@ -4,7 +4,7 @@
     <groupId>com.wcs.wcslib</groupId>
     <artifactId>wcslib-vaadin-widget-recaptcha-demo</artifactId>
     <packaging>war</packaging>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.1.1</version>
     <name>Vaadin ReCaptcha Add-on Demo</name>
 
     <properties>
