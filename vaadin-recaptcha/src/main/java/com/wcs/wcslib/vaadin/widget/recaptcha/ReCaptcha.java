@@ -18,15 +18,14 @@ package com.wcs.wcslib.vaadin.widget.recaptcha;
 import net.tanesha.recaptcha.ReCaptchaImpl;
 import net.tanesha.recaptcha.ReCaptchaResponse;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.VaadinService;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
+
+import elemental.json.JsonArray;
 
 /**
  * Vaadin wrapper component for ReCaptcha javascript API. recaptcha4j wrapped too for server-side validation.
@@ -53,11 +52,13 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         getState().options = options;
         getState().customHtml = customHtml;
         addFunction("responseChanged", new JavaScriptFunction() {
-            @Override
-            public void call(JSONArray arguments) throws JSONException {
-                challenge = arguments.getString(0);
+
+			@Override
+			public void call(JsonArray arguments) {
+				challenge = arguments.getString(0);
                 response = arguments.getString(1);
-            }
+				
+			}
         });
         this.privateKey = privateKey;
     }
