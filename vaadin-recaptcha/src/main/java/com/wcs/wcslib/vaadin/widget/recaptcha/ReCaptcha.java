@@ -53,12 +53,12 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         getState().customHtml = customHtml;
         addFunction("responseChanged", new JavaScriptFunction() {
 
-			@Override
-			public void call(JsonArray arguments) {
-				challenge = arguments.getString(0);
+            @Override
+            public void call(JsonArray arguments) {
+                challenge = arguments.getString(0);
                 response = arguments.getString(1);
-				
-			}
+
+            }
         });
         this.privateKey = privateKey;
     }
