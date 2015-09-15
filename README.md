@@ -43,7 +43,7 @@ See [DummyRegWithReCaptcha.java](vaadin-recaptcha-demo/src/main/java/com/wcs/wcs
 
 ## Documentation
 
-For ReCaptcha options see: https://developers.google.com/recaptcha/docs/customization.
+For ReCaptcha options see: https://developers.google.com/recaptcha/old/docs/customization.
 
 ## Known Issues and limitations
 
