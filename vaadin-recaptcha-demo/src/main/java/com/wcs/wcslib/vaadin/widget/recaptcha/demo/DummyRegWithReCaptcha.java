@@ -39,7 +39,6 @@ import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
  *
  * @author kumm
  */
-@JavaScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js")
 public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener {
 
     private VerticalLayout content;
