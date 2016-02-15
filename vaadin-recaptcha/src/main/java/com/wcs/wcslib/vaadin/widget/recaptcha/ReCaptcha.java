@@ -15,8 +15,7 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha;
 
-import net.tanesha.recaptcha.ReCaptchaImpl;
-import net.tanesha.recaptcha.ReCaptchaResponse;
+import java.net.URLEncoder;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.server.VaadinService;
@@ -25,7 +24,11 @@ import com.vaadin.ui.JavaScriptFunction;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
 
+import elemental.json.Json;
 import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+import elemental.json.JsonValue;
+import net.tanesha.recaptcha.http.SimpleHttpLoader;
 
 /**
  * Vaadin wrapper component for ReCaptcha javascript API. recaptcha4j wrapped too for server-side validation.
@@ -35,11 +38,10 @@ import elemental.json.JsonArray;
 @JavaScript("recaptcha-connector.js")
 public class ReCaptcha extends AbstractJavaScriptComponent {
 
+    public static final String VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
     private static final long serialVersionUID = 1L;
 
-    private String challenge;
     private String response;
-    private transient ReCaptchaImpl recaptcha4j;
     private final String privateKey;
 
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options) {
@@ -48,27 +50,17 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
 
     public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options, String customHtml) {
         super();
-        getState().publicKey = publicKey;
-        getState().options = options;
+        getState().options = options != null ? options : new ReCaptchaOptions();
+        getState().options.sitekey = publicKey;
         getState().customHtml = customHtml;
         addFunction("responseChanged", new JavaScriptFunction() {
 
             @Override
             public void call(JsonArray arguments) {
-                challenge = arguments.getString(0);
-                response = arguments.getString(1);
-
+                response = arguments.getString(0);
             }
         });
         this.privateKey = privateKey;
-    }
-
-    private ReCaptchaImpl getRecaptcha4j() {
-        if (recaptcha4j == null) {
-            recaptcha4j = new ReCaptchaImpl();
-            recaptcha4j.setPrivateKey(privateKey);
-        }
-        return recaptcha4j;
     }
 
     @Override
@@ -91,12 +83,22 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
             return false;
         }
         String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
-        ReCaptchaResponse reCaptchaResponse = getRecaptcha4j().checkAnswer(remoteAddr, challenge, response);
-        return reCaptchaResponse.isValid();
+
+        String postParameters = "secret=" + URLEncoder.encode(privateKey) + "&remoteip=" + URLEncoder.encode(remoteAddr)
+                + "&response=" + URLEncoder.encode(response);
+
+        String message = new SimpleHttpLoader().httpPost(VERIFY_URL, postParameters);
+        if (message != null) {
+            JsonObject parse = Json.parse(message);
+            JsonValue jsonValue = parse.get("success");
+            return jsonValue != null ? jsonValue.asBoolean() : false;
+        }
+        return false;
     }
 
     /**
      * Is user filled the input?
+     *
      * @return is empty
      */
     public boolean isEmpty() {

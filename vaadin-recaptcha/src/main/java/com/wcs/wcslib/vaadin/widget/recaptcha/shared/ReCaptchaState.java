@@ -19,8 +19,6 @@ import com.vaadin.shared.ui.JavaScriptComponentState;
 
 public class ReCaptchaState extends JavaScriptComponentState {
 
-    public String publicKey;
-
     public String customHtml;
 
     public ReCaptchaOptions options;
