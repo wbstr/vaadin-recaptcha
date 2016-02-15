@@ -27,6 +27,7 @@ import java.io.Serializable;
  */
 public class ReCaptchaOptions implements Serializable {
 
+    public String sitekey;
     public String lang;
     public String theme;
     public String custom_theme_widget;
