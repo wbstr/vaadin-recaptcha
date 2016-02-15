@@ -4,3 +4,5 @@ widgetsets
 vaadin-recaptcha/.classpath
 vaadin-recaptcha/.project
 vaadin-recaptcha/.settings/
+*.iml
+.idea
