@@ -10,7 +10,7 @@ Try the add-on demo at http://demo.webstar.hu/vaadin-recaptcha
 ## Usage
 
 1. Create your keys at http://www.google.com/recaptcha
-2. Include recaptcha javascript ajax api in your application. 
+2. (Optional) Include recaptcha javascript ajax api in your application.
     Simplest way is annotating your UI, or a parent component:
     ````
     @JavaScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js")
@@ -43,7 +43,7 @@ See [DummyRegWithReCaptcha.java](vaadin-recaptcha-demo/src/main/java/com/wcs/wcs
 
 ## Documentation
 
-For ReCaptcha options see: https://developers.google.com/recaptcha/old/docs/customization.
+For ReCaptcha options see: https://developers.google.com/recaptcha/docs/display.
 
 ## Known Issues and limitations
 
@@ -52,5 +52,3 @@ For ReCaptcha options see: https://developers.google.com/recaptcha/old/docs/cust
 2. The javascript api does not support more recaptcha on one page.
 
 3. The javascript api does not suport changing options (like theme, or language) on the same page. Once a component is rendered, all other components inherit the options, until page reload.
-
-
