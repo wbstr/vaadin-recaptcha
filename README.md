@@ -10,20 +10,14 @@ Try the add-on demo at http://demo.webstar.hu/vaadin-recaptcha
 ## Usage
 
 1. Create your keys at http://www.google.com/recaptcha
-2. (Optional) Include recaptcha javascript ajax api in your application.
-    Simplest way is annotating your UI, or a parent component:
-    ````
-    @JavaScript("http://www.google.com/recaptcha/api/js/recaptcha_ajax.js")
-    public class MyUI extends UI {
-    ````
 
-3. Create, and add the component to your UI
+2. Create, and add the component to your UI
     ```
     ReCaptcha captcha = new ReCaptcha(
         your_private_key,
-        your public_key,
         new ReCaptchaOptions() {{//your options
             theme = "white";
+            sitekey = your public_key;
         }}
     );
     layout.addComponent(captcha);
