@@ -1,6 +1,6 @@
 # ReCaptcha Add-on for Vaadin 7
 
-Vaadin-recaptcha is a wrapper component for ReCaptcha.
+Vaadin-recaptcha is a wrapper component for ReCaptcha v2.
 See http://www.google.com/recaptcha
 
 ## Online demo
@@ -16,14 +16,14 @@ Try the add-on demo at http://demo.webstar.hu/vaadin-recaptcha
     ReCaptcha captcha = new ReCaptcha(
         your_private_key,
         new ReCaptchaOptions() {{//your options
-            theme = "white";
+            theme = "light";
             sitekey = your public_key;
         }}
     );
     layout.addComponent(captcha);
     ```
 
-4. Validate somewhere in an event handler
+3. Validate somewhere in an event handler
     ```
     if (!captcha.validate()) {
         Notification.show("Invalid!", Notification.Type.ERROR_MESSAGE);
@@ -37,7 +37,8 @@ See [DummyRegWithReCaptcha.java](vaadin-recaptcha-demo/src/main/java/com/wcs/wcs
 
 ## Documentation
 
-For ReCaptcha options see: https://developers.google.com/recaptcha/docs/display.
+For ReCaptcha options see: https://developers.google.com/recaptcha/docs/display#render_param.
+For Language codes see: https://developers.google.com/recaptcha/docs/language
 
 ## Known Issues and limitations
 
