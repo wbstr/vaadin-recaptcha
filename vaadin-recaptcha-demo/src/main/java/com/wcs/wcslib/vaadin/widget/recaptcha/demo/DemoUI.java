@@ -27,7 +27,6 @@ import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-
 import javax.servlet.annotation.WebServlet;
 
 @Title("ReCaptcha Add-on Demo")

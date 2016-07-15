@@ -15,23 +15,15 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha;
 
-import java.net.URLEncoder;
-
 import com.vaadin.annotations.JavaScript;
-import com.vaadin.server.VaadinService;
 import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
-
-import elemental.json.Json;
 import elemental.json.JsonArray;
-import elemental.json.JsonObject;
-import elemental.json.JsonValue;
-import net.tanesha.recaptcha.http.SimpleHttpLoader;
 
 /**
- * Vaadin wrapper component for ReCaptcha javascript API. recaptcha4j wrapped too for server-side validation.
+ * Vaadin wrapper component for ReCaptcha javascript API.
  *
  * @author kumm
  */
@@ -42,25 +34,21 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     private static final long serialVersionUID = 1L;
 
     private String response;
-    private final String privateKey;
 
-    public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options) {
-        this(privateKey, publicKey, options, null);
-    }
+    private final ReCaptchaValidator reCaptchaValidator;
 
-    public ReCaptcha(String privateKey, String publicKey, ReCaptchaOptions options, String customHtml) {
+    public ReCaptcha(String privateKey, ReCaptchaOptions options) {
         super();
-        getState().options = options != null ? options : new ReCaptchaOptions();
-        options.sitekey = publicKey;
-        getState().customHtml = customHtml;
+        getState().options = options;
         addFunction("responseChanged", new JavaScriptFunction() {
 
             @Override
             public void call(JsonArray arguments) {
                 response = arguments.getString(0);
+
             }
         });
-        this.privateKey = privateKey;
+        reCaptchaValidator = new ReCaptchaValidator(privateKey);
     }
 
     @Override
@@ -69,12 +57,9 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     }
 
     /**
-     * Validates the answer with server-side ReCaptcha api.
-     * When the answer is empty returns false.
-     * When the answer is valid, this method will return true for the first time only.
-     * When the answer is invalid, you have to reload to get a new chance to pass.
-     * This behavior comes from ReCaptcha.
-     * Recaptcha4j used for handling the api.
+     * Validates the answer with server-side ReCaptcha api. When the answer is empty returns false. When the answer is
+     * valid, this method will return true for the first time only. When the answer is invalid, you have to reload to
+     * get a new chance to pass. This behavior comes from ReCaptcha.
      *
      * @return valid, or not
      */
@@ -82,23 +67,12 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         if (isEmpty()) {
             return false;
         }
-        String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
-
-        String postParameters = "secret=" + URLEncoder.encode(privateKey) + "&remoteip=" + URLEncoder.encode(remoteAddr)
-                + "&response=" + URLEncoder.encode(response);
-
-        String message = new SimpleHttpLoader().httpPost(VERIFY_URL, postParameters);
-        if (message != null) {
-            JsonObject parse = Json.parse(message);
-            JsonValue jsonValue = parse.get("success");
-            return jsonValue != null ? jsonValue.asBoolean() : false;
-        }
-        return false;
+        return reCaptchaValidator.checkAnswer(response);
     }
 
     /**
      * Is user filled the input?
-     * 
+     *
      * @return is empty
      */
     public boolean isEmpty() {

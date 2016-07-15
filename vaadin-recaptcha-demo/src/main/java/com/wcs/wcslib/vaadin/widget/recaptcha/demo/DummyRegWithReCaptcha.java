@@ -15,7 +15,6 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
-import com.vaadin.annotations.JavaScript;
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
 import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
@@ -92,15 +91,15 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
 
     private ReCaptcha createCaptcha(final ConfigComponent config) {
         return new ReCaptcha(
-                "6Lfv5OoSAAAAAPEbWhNB0ERopfQpRxr8_5yncOmg", 
-                "6Lfv5OoSAAAAAHa4zmExf6w2ja3vm-8ABKgyepq-", 
-                new ReCaptchaOptions() {{
-                    theme = config.getTheme();
-                    lang = config.getLang();
-                    custom_translations = config.getCustomTranslations();
-                    custom_theme_widget = config.getCustomThemeWidget();
-                }}, 
-                config.getCustomHtml()
+                "6Lc8ESUTAAAAAB_8IHl5FcE8o_QCToT44hOhBa-1",
+                new ReCaptchaOptions() {
+                    {
+                        theme = config.getTheme();
+                        sitekey = "6Lc8ESUTAAAAABAYgG11XSkPRY-YXTKKFCjGb9GJ";
+                        type = config.getType();
+                        size = config.getSize();
+                    }
+                }
         );
     }
 

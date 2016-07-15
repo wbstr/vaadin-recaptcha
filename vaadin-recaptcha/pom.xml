@@ -30,8 +30,8 @@
         <url>https://github.com/wbstr/ReCaptcha.git</url>
         <connection>scm:git:git@github.com:wbstr/vaadin-recaptcha.git</connection>
         <developerConnection>scm:git:git@github.com:wbstr/vaadin-recaptcha.git</developerConnection>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <issueManagement>
         <system>GitHub</system>
@@ -51,11 +51,6 @@
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-server</artifactId>
             <version>${vaadin.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>net.tanesha.recaptcha4j</groupId>
-            <artifactId>recaptcha4j</artifactId>
-            <version>0.0.7</version>
         </dependency>
     </dependencies>
 
