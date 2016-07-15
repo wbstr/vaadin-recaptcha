@@ -39,7 +39,8 @@ public class ReCaptchaValidator {
         try {
             String remoteAddr = VaadinService.getCurrentRequest().getRemoteAddr();
 
-            String postParameters = "secret=" + URLEncoder.encode(privateKey, "UTF-8") + "&remoteip=" + URLEncoder.encode(remoteAddr, "UTF-8")
+            String postParameters = "secret=" + URLEncoder.encode(privateKey, "UTF-8")
+                    + "&remoteip=" + URLEncoder.encode(remoteAddr, "UTF-8")
                     + "&response=" + URLEncoder.encode(response, "UTF-8");
 
             String message = new SimpleHttpLoader().httpPost(VERIFY_URL, postParameters);

@@ -20,5 +20,5 @@ import com.vaadin.shared.ui.JavaScriptComponentState;
 public class ReCaptchaState extends JavaScriptComponentState {
 
     public ReCaptchaOptions options;
-
+    public String lang;
 }

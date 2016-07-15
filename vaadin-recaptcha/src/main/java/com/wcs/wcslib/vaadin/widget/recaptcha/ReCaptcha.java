@@ -37,15 +37,32 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
 
     private final ReCaptchaValidator reCaptchaValidator;
 
+    /**
+     *
+     * @param privateKey The secret key
+     * @param options Property names are same as javascript property names. See here:
+     */
     public ReCaptcha(String privateKey, ReCaptchaOptions options) {
+        this(privateKey, options, null);
+    }
+
+    /**
+     *
+     * @param privateKey The secret key
+     * @param options Property names are same as javascript property names. See here:
+     * https://developers.google.com/recaptcha/docs/display#render_param
+     * @param lang Language code. See here for available values: https://developers.google.com/recaptcha/docs/language
+     */
+    public ReCaptcha(String privateKey, ReCaptchaOptions options, String lang) {
         super();
         getState().options = options;
+        getState().lang = lang;
+
         addFunction("responseChanged", new JavaScriptFunction() {
 
             @Override
             public void call(JsonArray arguments) {
                 response = arguments.getString(0);
-
             }
         });
         reCaptchaValidator = new ReCaptchaValidator(privateKey);

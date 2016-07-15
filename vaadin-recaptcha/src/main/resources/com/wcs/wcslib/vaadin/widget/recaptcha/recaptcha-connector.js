@@ -67,6 +67,9 @@ window.com_wcs_wcslib_vaadin_widget_recaptcha_ReCaptcha =
                 var recaptchaImport = document.createElement('script');
                 //We are passing the "onload" parameter to enable the component rendering after recaptcha has been loaded
                 recaptchaImport.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaVaadinOnLoadCallBack&render=explicit';
+                if (this.getState().lang) {
+                    recaptchaImport.src += '&hl=' + this.getState().lang;
+                }
                 document.getElementsByTagName('head')[0].appendChild(recaptchaImport);
             }
         };

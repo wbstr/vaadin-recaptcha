@@ -99,7 +99,8 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
                         type = config.getType();
                         size = config.getSize();
                     }
-                }
+                },
+                config.getLang()
         );
     }
 
