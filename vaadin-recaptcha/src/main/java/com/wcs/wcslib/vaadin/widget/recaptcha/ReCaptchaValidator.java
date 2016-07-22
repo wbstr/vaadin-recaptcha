@@ -16,11 +16,10 @@
 package com.wcs.wcslib.vaadin.widget.recaptcha;
 
 import com.vaadin.server.VaadinService;
-import elemental.json.Json;
-import elemental.json.JsonObject;
-import elemental.json.JsonValue;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -45,13 +44,14 @@ public class ReCaptchaValidator {
 
             String message = new SimpleHttpLoader().httpPost(VERIFY_URL, postParameters);
             if (message != null) {
-                JsonObject parse = Json.parse(message);
-                JsonValue jsonValue = parse.get("success");
-                return jsonValue != null ? jsonValue.asBoolean() : false;
+                JSONObject jsonObject = new JSONObject(message);
+                return jsonObject.getBoolean("success");
             }
             return false;
         } catch (UnsupportedEncodingException ex) {
             throw new ReCaptchaException("Cannot encode answer.", ex);
+        } catch (JSONException ex) {
+            throw new ReCaptchaException("Cannot parse json.", ex);
         }
     }
 }

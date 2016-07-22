@@ -20,7 +20,8 @@ import com.vaadin.ui.AbstractJavaScriptComponent;
 import com.vaadin.ui.JavaScriptFunction;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
-import elemental.json.JsonArray;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Vaadin wrapper component for ReCaptcha javascript API.
@@ -61,7 +62,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         addFunction("responseChanged", new JavaScriptFunction() {
 
             @Override
-            public void call(JsonArray arguments) {
+            public void call(JSONArray arguments) throws JSONException{
                 response = arguments.getString(0);
             }
         });
