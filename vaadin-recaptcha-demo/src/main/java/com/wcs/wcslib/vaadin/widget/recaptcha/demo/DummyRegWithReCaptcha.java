@@ -15,22 +15,23 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Layout;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.Panel;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.themes.ValoTheme;
+import com.vaadin.v7.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.v7.data.fieldgroup.FieldGroup;
+import com.vaadin.v7.ui.PasswordField;
+import com.vaadin.v7.ui.TextField;
 import com.wcs.wcslib.vaadin.widget.recaptcha.ReCaptcha;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 
@@ -69,7 +70,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         Button reconfigBtn = createCancelBtn();
         Button submitBtn = new Button("Register", this);
         submitBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        submitBtn.addStyleName(Reindeer.BUTTON_DEFAULT);
+        submitBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         HorizontalLayout actionsLayout = new HorizontalLayout(submitBtn, reconfigBtn);
         actionsLayout.setSpacing(true);
         actionsLayout.setWidth(100, Unit.PERCENTAGE);
@@ -144,12 +145,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
     }
 
     private Button createCancelBtn() {
-        return new Button("Cancel", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Page.getCurrent().reload();
-            }
-        });
+        return new Button("Cancel", (ClickListener) event -> Page.getCurrent().reload());
     }
 
     public class RegistrationBean {

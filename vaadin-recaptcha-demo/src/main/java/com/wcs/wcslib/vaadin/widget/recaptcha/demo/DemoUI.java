@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 kumm.
+ *           2017 Daniel Nordhoff-Vergien
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +17,26 @@
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
 
+import javax.servlet.annotation.WebServlet;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
+import com.vaadin.annotations.Widgetset;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
+import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import javax.servlet.annotation.WebServlet;
 
 @Title("ReCaptcha Add-on Demo")
 @SuppressWarnings("serial")
 @Theme("valo")
+@Widgetset("com.vaadin.v7.Vaadin7WidgetSet")
 public class DemoUI extends UI {
 
     @WebServlet(value = "/*")
@@ -56,15 +61,11 @@ public class DemoUI extends UI {
         layout.setSpacing(true);
         layout.setMargin(true);
 
-        Button showBtn = new Button("SHOW", new Button.ClickListener() {
-
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                layout.removeAllComponents();
-                DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent);
-                layout.addComponent(dummyRegWithReCaptcha);
-                layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
-            }
+        Button showBtn = new Button("SHOW", (ClickListener) event -> {
+            layout.removeAllComponents();
+            DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent);
+            layout.addComponent(dummyRegWithReCaptcha);
+            layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
         });
 
         layout.addComponent(showBtn);
