@@ -1,5 +1,6 @@
 /*
  * Copyright 2013 kumm.
+ *           2017 Daniel Nordhoff-Vergien
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +18,8 @@ package com.wcs.wcslib.vaadin.widget.recaptcha;
 
 import com.vaadin.annotations.JavaScript;
 import com.vaadin.ui.AbstractJavaScriptComponent;
-import com.vaadin.ui.JavaScriptFunction;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaState;
-import elemental.json.JsonArray;
 
 /**
  * Vaadin wrapper component for ReCaptcha javascript API.
@@ -58,13 +57,7 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
         getState().options = options;
         getState().lang = lang;
 
-        addFunction("responseChanged", new JavaScriptFunction() {
-
-            @Override
-            public void call(JsonArray arguments) {
-                response = arguments.getString(0);
-            }
-        });
+        addFunction("responseChanged", arguments -> response = arguments.getString(0));
         reCaptchaValidator = new ReCaptchaValidator(privateKey);
     }
 
