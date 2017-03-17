@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -17,8 +16,7 @@ public class SimpleHttpLoader {
             URL url = new URL(urlS);
             connection = url.openConnection();
 
-            // jdk 1.4 workaround
-            setJdk15Timeouts(connection);
+            setTimeouts(connection);
 
             in = connection.getInputStream();
 
@@ -58,7 +56,7 @@ public class SimpleHttpLoader {
             connection.setDoOutput(true);
             connection.setDoInput(true);
 
-            setJdk15Timeouts(connection);
+            setTimeouts(connection);
 
             OutputStream out = connection.getOutputStream();
             out.write(postdata.getBytes());
@@ -95,26 +93,9 @@ public class SimpleHttpLoader {
         }
     }
 
-    /**
-     * Timeouts are new from JDK1.5, handle it generic for JDK1.4 compatibility.
-     *
-     * @param connection
-     */
-    private void setJdk15Timeouts(URLConnection connection) {
-        try {
-            Method readTimeoutMethod = connection.getClass().getMethod("setReadTimeout", new Class[]{Integer.class});
-            Method connectTimeoutMethod = connection.getClass().getMethod("setConnectTimeout", new Class[]{Integer.class});
-            if (readTimeoutMethod != null) {
-                readTimeoutMethod.invoke(connection, new Object[]{new Integer(10000)});
-                System.out.println("Set timeout.");
-            }
-            if (connectTimeoutMethod != null) {
-                connectTimeoutMethod.invoke(connection, new Object[]{new Integer(10000)});
-                System.out.println("Set timeout.");
-            }
-        } catch (Exception e) {
-            // swallow silently
-        }
+    private void setTimeouts(URLConnection connection) {
+        connection.setReadTimeout(10000);
+        connection.setConnectTimeout(10000);
     }
 
 }
