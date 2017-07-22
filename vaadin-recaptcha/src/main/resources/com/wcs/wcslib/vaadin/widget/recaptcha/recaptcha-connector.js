@@ -19,6 +19,7 @@ window.com_wcs_wcslib_vaadin_widget_recaptcha_ReCaptcha =
 
             var element = this.getElement();
             var connector = this;
+            var grecaptchaId;
 
             this.onStateChange = function () {
                 this.stateChangedDuringLoad = true;
@@ -34,17 +35,18 @@ window.com_wcs_wcslib_vaadin_widget_recaptcha_ReCaptcha =
 
                     //Add callback to grecaptcha options to force server update on user input
                     state.options['callback'] = function () {
-                        connector.responseChanged(grecaptcha.getResponse());
+                        var response = grecaptcha.getResponse(grecaptchaId);
+                        connector.responseChanged(response);
                     };
 
                     //Add expired-callback to reload component automatically
                     state.options['expired-callback'] = this.reload;
 
-                    grecaptcha.render(elementId, state.options);
+                    grecaptchaId = grecaptcha.render(elementId, state.options);
                 };
 
                 this.reload = function () {
-                    grecaptcha.reset();
+                    grecaptcha.reset(grecaptchaId);
                 };
 
             }.bind(this);
@@ -56,7 +58,6 @@ window.com_wcs_wcslib_vaadin_widget_recaptcha_ReCaptcha =
                 if (this.stateChangedDuringLoad) {
                     this.onStateChange();
                 }
-                ;
             }.bind(this);
 
             //We are checking if recaptcha is already on the window context. We will either init the component or load recaptcha
