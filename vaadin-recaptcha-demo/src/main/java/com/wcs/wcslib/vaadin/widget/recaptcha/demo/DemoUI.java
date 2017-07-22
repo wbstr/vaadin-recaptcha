@@ -34,6 +34,9 @@ import javax.servlet.annotation.WebServlet;
 @Theme("valo")
 public class DemoUI extends UI {
 
+    private VerticalLayout layout;
+    private ConfigComponent configComponent;
+
     @WebServlet(value = "/*")
     @VaadinServletConfiguration(productionMode = false, ui = DemoUI.class)
     public static class Servlet extends VaadinServlet {
@@ -42,8 +45,8 @@ public class DemoUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
 
-        final VerticalLayout layout = new VerticalLayout();
-        final ConfigComponent configComponent = new ConfigComponent();
+        layout = new VerticalLayout();
+        configComponent = new ConfigComponent();
 
         layout.addComponent(new Label("<h1>Vaadin ReCaptcha Add-on Demo</h1>"
                 + "<p>See "
@@ -57,18 +60,26 @@ public class DemoUI extends UI {
         layout.setMargin(true);
 
         Button showBtn = new Button("SHOW", new Button.ClickListener() {
-
             @Override
             public void buttonClick(Button.ClickEvent event) {
-                layout.removeAllComponents();
-                DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent);
-                layout.addComponent(dummyRegWithReCaptcha);
-                layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
+                show();
             }
         });
 
         layout.addComponent(showBtn);
         setContent(layout);
+    }
+
+    private void show()  {
+        layout.removeAllComponents();
+        DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent, new Runnable() {
+            @Override
+            public void run() {
+                show();
+            }
+        });
+        layout.addComponent(dummyRegWithReCaptcha);
+        layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
     }
 
 }

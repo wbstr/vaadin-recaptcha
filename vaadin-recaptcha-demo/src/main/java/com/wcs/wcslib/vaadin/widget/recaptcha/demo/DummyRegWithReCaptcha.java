@@ -45,8 +45,10 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
     private BeanFieldGroup<RegistrationBean> fieldGroup;
     private RegistrationBean regBean;
     private int captchaFailCount = 0;
+    private Runnable showFunc;
 
-    public DummyRegWithReCaptcha(ConfigComponent config) {
+    public DummyRegWithReCaptcha(ConfigComponent config, Runnable showFunc) {
+        this.showFunc = showFunc;
         initFieldGroup();
         reCaptcha = createCaptcha(config);
         setCaption("Dummy registration");
@@ -141,6 +143,12 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         //since you can use a code just once
         content.removeAllComponents();
         content.addComponent(new Label("Congratulations!"));
+        content.addComponent(new Button("again", new Button.ClickListener() {
+            @Override
+            public void buttonClick(Button.ClickEvent event) {
+                showFunc.run();
+            }
+        }));
     }
 
     private Button createCancelBtn() {
