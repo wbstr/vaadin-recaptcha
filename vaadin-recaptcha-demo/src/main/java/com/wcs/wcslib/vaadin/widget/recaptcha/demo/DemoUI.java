@@ -21,7 +21,7 @@ import com.vaadin.annotations.Title;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.server.VaadinServlet;
-import com.vaadin.shared.ui.label.ContentMode;
+import com.vaadin.shared.ui.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Label;
@@ -59,12 +59,7 @@ public class DemoUI extends UI {
         layout.setSpacing(true);
         layout.setMargin(true);
 
-        Button showBtn = new Button("SHOW", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                show();
-            }
-        });
+        Button showBtn = new Button("SHOW", (Button.ClickListener) event -> show());
 
         layout.addComponent(showBtn);
         setContent(layout);
@@ -72,12 +67,7 @@ public class DemoUI extends UI {
 
     private void show()  {
         layout.removeAllComponents();
-        DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent, new Runnable() {
-            @Override
-            public void run() {
-                show();
-            }
-        });
+        DummyRegWithReCaptcha dummyRegWithReCaptcha = new DummyRegWithReCaptcha(configComponent, () -> show());
         layout.addComponent(dummyRegWithReCaptcha);
         layout.setComponentAlignment(dummyRegWithReCaptcha, Alignment.MIDDLE_CENTER);
     }
