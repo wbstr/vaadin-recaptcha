@@ -15,22 +15,12 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
-import com.vaadin.data.fieldgroup.BeanFieldGroup;
-import com.vaadin.data.fieldgroup.FieldGroup;
+import com.vaadin.data.Binder;
+import com.vaadin.data.BinderValidationStatus;
 import com.vaadin.event.ShortcutAction;
 import com.vaadin.server.Page;
-import com.vaadin.ui.Alignment;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.GridLayout;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.Layout;
-import com.vaadin.ui.Notification;
-import com.vaadin.ui.Panel;
-import com.vaadin.ui.PasswordField;
-import com.vaadin.ui.TextField;
-import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.themes.Reindeer;
+import com.vaadin.ui.*;
+import com.vaadin.ui.themes.ValoTheme;
 import com.wcs.wcslib.vaadin.widget.recaptcha.ReCaptcha;
 import com.wcs.wcslib.vaadin.widget.recaptcha.shared.ReCaptchaOptions;
 
@@ -42,14 +32,15 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
 
     private VerticalLayout content;
     private ReCaptcha reCaptcha;
-    private BeanFieldGroup<RegistrationBean> fieldGroup;
-    private RegistrationBean regBean;
+    private Binder<RegistrationBean> binder;
     private int captchaFailCount = 0;
     private Runnable showFunc;
+    private RegistrationFields registrationFields;
+    private Label statusLabel;
 
     public DummyRegWithReCaptcha(ConfigComponent config, Runnable showFunc) {
         this.showFunc = showFunc;
-        initFieldGroup();
+        bindFields();
         reCaptcha = createCaptcha(config);
         setCaption("Dummy registration");
         setSizeUndefined();
@@ -58,20 +49,30 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         buildContent();
     }
 
-    private void initFieldGroup() {
-        fieldGroup = new BeanFieldGroup<RegistrationBean>(RegistrationBean.class);
-        regBean = new RegistrationBean();
-        fieldGroup.setItemDataSource(regBean);
+    private void bindFields() {
+        binder = new Binder<>(RegistrationBean.class);
+        registrationFields = new RegistrationFields();
+        binder.forMemberField(registrationFields.login)
+                .asRequired("Required!");
+        binder.forMemberField(registrationFields.password).asRequired("Required!");
+        binder.forMemberField(registrationFields.passwordAgain).asRequired("Required!");
+        binder.bindInstanceFields(registrationFields);
+        binder.setBean(new RegistrationBean());
+        binder.withValidator((regBean) ->
+                regBean.password.equals(regBean.passwordAgain),"passwords do not match");
+        statusLabel = new Label();
+        binder.setStatusLabel(statusLabel);
     }
 
     private void buildContent() {
         content.setMargin(true);
         content.addComponent(createForm());
+        reCaptcha.setWidth(100, Unit.PERCENTAGE);
         content.addComponent(reCaptcha);
         Button reconfigBtn = createCancelBtn();
         Button submitBtn = new Button("Register", this);
         submitBtn.setClickShortcut(ShortcutAction.KeyCode.ENTER);
-        submitBtn.addStyleName(Reindeer.BUTTON_DEFAULT);
+        submitBtn.addStyleName(ValoTheme.BUTTON_PRIMARY);
         HorizontalLayout actionsLayout = new HorizontalLayout(submitBtn, reconfigBtn);
         actionsLayout.setSpacing(true);
         actionsLayout.setWidth(100, Unit.PERCENTAGE);
@@ -80,13 +81,12 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
     }
 
     private Layout createForm() {
-        RegistrationFields registrationFields = new RegistrationFields();
-        fieldGroup.buildAndBindMemberFields(registrationFields);
-        GridLayout layout = new GridLayout(2, 2);
+        GridLayout layout = new GridLayout(2, 3);
         layout.setSpacing(true);
-        layout.addComponent(registrationFields.getLogin(), 0, 0);
-        layout.addComponent(registrationFields.getPassword(), 0, 1);
-        layout.addComponent(registrationFields.getPasswordAgain(), 1, 1);
+        layout.addComponent(registrationFields.login, 0, 0);
+        layout.addComponent(registrationFields.password, 0, 1);
+        layout.addComponent(registrationFields.passwordAgain, 1, 1);
+        layout.addComponent(statusLabel, 0, 2, 1, 2);
         registrationFields.login.focus();
         return layout;
     }
@@ -108,18 +108,8 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
 
     @Override
     public void buttonClick(Button.ClickEvent event) {
-        try {
-            fieldGroup.commit();
-        } catch (FieldGroup.CommitException ex) {
-            Notification.show("All fields are required!", Notification.Type.ERROR_MESSAGE);
-            fieldGroup.discard();
-            return;
-        }
-        if (!regBean.password.equals(regBean.passwordAgain)) {
-            Notification.show("passwords do not match", Notification.Type.ERROR_MESSAGE);
-            regBean.password = "";
-            regBean.passwordAgain = "";
-            fieldGroup.discard();
+        final BinderValidationStatus<RegistrationBean> status = binder.validate();
+        if (status.hasErrors()) {
             return;
         }
 
@@ -143,21 +133,11 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         //since you can use a code just once
         content.removeAllComponents();
         content.addComponent(new Label("Congratulations!"));
-        content.addComponent(new Button("again", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                showFunc.run();
-            }
-        }));
+        content.addComponent(new Button("again", (Button.ClickListener) e -> showFunc.run()));
     }
 
     private Button createCancelBtn() {
-        return new Button("Cancel", new Button.ClickListener() {
-            @Override
-            public void buttonClick(Button.ClickEvent event) {
-                Page.getCurrent().reload();
-            }
-        });
+        return new Button("Cancel", event -> Page.getCurrent().reload());
     }
 
     public class RegistrationBean {
@@ -191,7 +171,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         }
     }
 
-    public class RegistrationFields {
+    private class RegistrationFields {
 
         private TextField login;
         private PasswordField password;
@@ -199,39 +179,13 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
 
         public RegistrationFields() {
             login = new TextField("login");
-            login.setRequired(true);
             login.setTabIndex(2);
             password = new PasswordField("password");
-            password.setRequired(true);
             password.setTabIndex(3);
             passwordAgain = new PasswordField("retype password");
-            passwordAgain.setRequired(true);
             passwordAgain.setTabIndex(4);
         }
 
-        public TextField getLogin() {
-            return login;
-        }
-
-        public void setLogin(TextField login) {
-            this.login = login;
-        }
-
-        public PasswordField getPassword() {
-            return password;
-        }
-
-        public void setPassword(PasswordField password) {
-            this.password = password;
-        }
-
-        public PasswordField getPasswordAgain() {
-            return passwordAgain;
-        }
-
-        public void setPasswordAgain(PasswordField passwordAgain) {
-            this.passwordAgain = passwordAgain;
-        }
     }
 
 }

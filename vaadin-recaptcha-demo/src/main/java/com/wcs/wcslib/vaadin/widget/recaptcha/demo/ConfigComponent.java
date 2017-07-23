@@ -15,7 +15,8 @@
  */
 package com.wcs.wcslib.vaadin.widget.recaptcha.demo;
 
-import com.vaadin.data.fieldgroup.FieldGroup;
+import java.util.Arrays;
+
 import com.vaadin.ui.CustomComponent;
 import com.vaadin.ui.FormLayout;
 import com.vaadin.ui.HorizontalLayout;
@@ -23,7 +24,6 @@ import com.vaadin.ui.Layout;
 import com.vaadin.ui.NativeSelect;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
-import java.util.Arrays;
 
 /**
  *
@@ -32,9 +32,9 @@ import java.util.Arrays;
 public class ConfigComponent extends CustomComponent {
 
     private HorizontalLayout compositionRoot;
-    private NativeSelect themeSelect;
-    private NativeSelect typeSelect;
-    private NativeSelect sizeSelect;
+    private NativeSelect<String> themeSelect;
+    private NativeSelect<String> typeSelect;
+    private NativeSelect<String> sizeSelect;
     private TextField langField;
 
     public ConfigComponent() {
@@ -45,15 +45,15 @@ public class ConfigComponent extends CustomComponent {
     }
 
     public String getTheme() {
-        return (String) themeSelect.getValue();
+        return themeSelect.getValue();
     }
 
     public String getType() {
-        return (String) typeSelect.getValue();
+        return typeSelect.getValue();
     }
 
     public String getSize() {
-        return (String) sizeSelect.getValue();
+        return sizeSelect.getValue();
     }
 
     public String getLang() {
@@ -69,8 +69,8 @@ public class ConfigComponent extends CustomComponent {
 
     private Layout createThemeconfLayout() {
         Layout themeLayout = new FormLayout();
-        themeSelect = new NativeSelect("theme", Arrays.asList("light", "dark"));
-        themeSelect.setImmediate(true);
+        themeSelect = new NativeSelect<>("theme",
+                Arrays.asList("light", "dark"));
         themeSelect.setValue("light");
         themeLayout.addComponent(themeSelect);
         return themeLayout;
@@ -78,8 +78,8 @@ public class ConfigComponent extends CustomComponent {
 
     private Layout createTypeconfLayout() {
         Layout typeLayout = new FormLayout();
-        typeSelect = new NativeSelect("type", Arrays.asList("image", "audio"));
-        typeSelect.setImmediate(true);
+        typeSelect = new NativeSelect<>("type",
+                Arrays.asList("image", "audio"));
         typeSelect.setValue("image");
         typeLayout.addComponent(typeSelect);
         return typeLayout;
@@ -87,14 +87,14 @@ public class ConfigComponent extends CustomComponent {
 
     private Layout createSizeconfLayout() {
         Layout sizeLayout = new FormLayout();
-        sizeSelect = new NativeSelect("size", Arrays.asList("normal", "compact"));
-        sizeSelect.setImmediate(true);
+        sizeSelect = new NativeSelect<>("size",
+                Arrays.asList("normal", "compact"));
         sizeSelect.setValue("normal");
         sizeLayout.addComponent(sizeSelect);
         return sizeLayout;
     }
 
-    private Layout createLangconfLayout() throws FieldGroup.BindException {
+    private Layout createLangconfLayout() {
         VerticalLayout langLayout = new VerticalLayout();
         langField = new TextField("lang");
         langLayout.addComponent(new FormLayout(langField));
