@@ -38,7 +38,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
     private RegistrationFields registrationFields;
     private Label statusLabel;
 
-    public DummyRegWithReCaptcha(ConfigComponent config, Runnable showFunc) {
+    public DummyRegWithReCaptcha(DemoUI.Config config, Runnable showFunc) {
         this.showFunc = showFunc;
         bindFields();
         reCaptcha = createCaptcha(config);
@@ -52,8 +52,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
     private void bindFields() {
         binder = new Binder<>(RegistrationBean.class);
         registrationFields = new RegistrationFields();
-        binder.forMemberField(registrationFields.login)
-                .asRequired("Required!");
+        binder.forMemberField(registrationFields.login).asRequired("Required!");
         binder.forMemberField(registrationFields.password).asRequired("Required!");
         binder.forMemberField(registrationFields.passwordAgain).asRequired("Required!");
         binder.bindInstanceFields(registrationFields);
@@ -91,7 +90,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         return layout;
     }
 
-    private ReCaptcha createCaptcha(final ConfigComponent config) {
+    private ReCaptcha createCaptcha(final DemoUI.Config config) {
         return new ReCaptcha(
                 "6Lc8ESUTAAAAAB_8IHl5FcE8o_QCToT44hOhBa-1",
                 new ReCaptchaOptions() {
@@ -140,8 +139,7 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         return new Button("Cancel", event -> Page.getCurrent().reload());
     }
 
-    public class RegistrationBean {
-
+    public static class RegistrationBean {
         private String login = "";
         private String password = "";
         private String passwordAgain = "";
@@ -171,11 +169,11 @@ public class DummyRegWithReCaptcha extends Panel implements Button.ClickListener
         }
     }
 
-    private class RegistrationFields {
+    public static class RegistrationFields {
 
-        private TextField login;
-        private PasswordField password;
-        private PasswordField passwordAgain;
+        public TextField login;
+        public PasswordField password;
+        public PasswordField passwordAgain;
 
         public RegistrationFields() {
             login = new TextField("login");
