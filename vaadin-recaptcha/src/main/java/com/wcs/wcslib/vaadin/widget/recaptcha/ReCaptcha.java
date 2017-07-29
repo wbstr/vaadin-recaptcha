@@ -30,7 +30,6 @@ import elemental.json.JsonArray;
 @JavaScript("recaptcha-connector.js")
 public class ReCaptcha extends AbstractJavaScriptComponent {
 
-    public static final String VERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
     private static final long serialVersionUID = 1L;
 
     private String response;
@@ -38,20 +37,19 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     private final ReCaptchaValidator reCaptchaValidator;
 
     /**
-     *
      * @param privateKey The secret key
-     * @param options Property names are same as javascript property names. See here:
+     * @param options    Property names are same as javascript property names. See here:
+     *                   https://developers.google.com/recaptcha/docs/display#render_param
      */
     public ReCaptcha(String privateKey, ReCaptchaOptions options) {
         this(privateKey, options, null);
     }
 
     /**
-     *
      * @param privateKey The secret key
-     * @param options Property names are same as javascript property names. See here:
-     * https://developers.google.com/recaptcha/docs/display#render_param
-     * @param lang Language code. See here for available values: https://developers.google.com/recaptcha/docs/language
+     * @param options    Property names are same as javascript property names. See here:
+     *                   https://developers.google.com/recaptcha/docs/display#render_param
+     * @param lang       Language code. See here for available values: https://developers.google.com/recaptcha/docs/language
      */
     public ReCaptcha(String privateKey, ReCaptchaOptions options, String lang) {
         super();
@@ -74,9 +72,11 @@ public class ReCaptcha extends AbstractJavaScriptComponent {
     }
 
     /**
-     * Validates the answer with server-side ReCaptcha api. When the answer is empty returns false. When the answer is
-     * valid, this method will return true for the first time only. When the answer is invalid, you have to reload to
-     * get a new chance to pass. This behavior comes from ReCaptcha.
+     * Validates the answer with server-side ReCaptcha api.
+     *
+     * When the answer is empty returns false.
+     * When the answer is valid, this method will return true for the first time only.
+     * When the answer is invalid, you have to reload to get a new chance to pass. This behavior comes from ReCaptcha.
      *
      * @return valid, or not
      */

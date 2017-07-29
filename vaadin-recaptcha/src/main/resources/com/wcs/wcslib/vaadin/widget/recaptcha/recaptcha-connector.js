@@ -51,20 +51,20 @@ window.com_wcs_wcslib_vaadin_widget_recaptcha_ReCaptcha =
 
             }.bind(this);
 
-            //Global scope to enable call outside this script.
-            recaptchaVaadinOnLoadCallBack = function () {
-                init();
-                //Vaadin may update the component while recaptcha is loading in parallel. We will init the component if that happened
-                if (this.stateChangedDuringLoad) {
-                    this.onStateChange();
-                }
-            }.bind(this);
-
             //We are checking if recaptcha is already on the window context. We will either init the component or load recaptcha
             if (window['grecaptcha']) {
                 init();
             }
             else {
+                //Global scope to enable call outside this script.
+                recaptchaVaadinOnLoadCallBack = function () {
+                    init();
+                    //Vaadin may update the component while recaptcha is loading in parallel. We will init the component if that happened
+                    if (this.stateChangedDuringLoad) {
+                        this.onStateChange();
+                    }
+                    recaptchaVaadinOnLoadCallBack = null;
+                }.bind(this);
                 var recaptchaImport = document.createElement('script');
                 //We are passing the "onload" parameter to enable the component rendering after recaptcha has been loaded
                 recaptchaImport.src = 'https://www.google.com/recaptcha/api.js?onload=recaptchaVaadinOnLoadCallBack&render=explicit';
